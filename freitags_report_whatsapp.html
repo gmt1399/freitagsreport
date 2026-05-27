@@ -1,0 +1,200 @@
+
+<h2 class="sr-only">Ausfüllbare Vorlage für den wöchentlichen Freitags-Report, mit WhatsApp-Fettschrift-Formatierung im Output</h2>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 10px; }
+.card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.card-icon { font-size: 18px; color: var(--color-text-secondary); }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.card-badge { margin-left: auto; font-size: 11px; padding: 2px 9px; border-radius: 99px; }
+.b-blue { background: #E6F1FB; color: #0C447C; }
+.b-green { background: #E1F5EE; color: #085041; }
+.b-amber { background: #FAEEDA; color: #633806; }
+.b-gray { background: #F1EFE8; color: #444441; }
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.field:last-child { margin-bottom: 0; }
+.field label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); letter-spacing: 0.04em; text-transform: uppercase; }
+.field input, .field textarea, .field select { font-size: 13px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); padding: 8px 10px; background: var(--color-background-primary); color: var(--color-text-primary); width: 100%; }
+.field textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.todo-row { display: grid; grid-template-columns: 1fr 120px; gap: 8px; margin-bottom: 6px; align-items: center; }
+.status-row { display: flex; gap: 8px; }
+.status-btn { flex: 1; padding: 7px 10px; font-size: 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; text-align: center; transition: background 0.12s, border-color 0.12s; }
+.status-btn.active-green { background: #E1F5EE; border-color: #0F6E56; color: #085041; font-weight: 500; }
+.status-btn.active-amber { background: #FAEEDA; border-color: #854F0B; color: #633806; font-weight: 500; }
+.status-btn.active-red { background: #FCEBEB; border-color: #A32D2D; color: #791F1F; font-weight: 500; }
+.highlight-box { background: #FAEEDA; border: 0.5px solid #854F0B; border-radius: var(--border-radius-md); padding: 10px 12px; }
+.highlight-box textarea { background: transparent; border: none; padding: 0; font-size: 13px; color: #412402; width: 100%; resize: none; min-height: 48px; }
+.highlight-box textarea:focus { outline: none; }
+.highlight-label { font-size: 11px; font-weight: 500; color: #633806; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+.copy-btn { margin-top: 1rem; width: 100%; padding: 10px; font-size: 13px; font-weight: 500; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.copy-btn:hover { background: var(--color-background-tertiary); }
+</style>
+
+<div class="card">
+  <div class="card-head">
+    <i class="ti ti-calendar-week card-icon" aria-hidden="true"></i>
+    <span class="card-title">Eckdaten</span>
+  </div>
+  <div class="three">
+    <div class="field"><label>Kalenderwoche</label><input type="text" id="kw" placeholder="KW 22"></div>
+    <div class="field"><label>Zeitraum</label><input type="text" id="zeitraum" placeholder="27.05. – 31.05.2026"></div>
+    <div class="field"><label>Einarbeitungsmonat</label><select id="monat"><option>Monat 1</option><option>Monat 2</option><option>Monat 3</option></select></div>
+  </div>
+  <div class="two" style="margin-top:10px;">
+    <div class="field"><label>Arbeitgeber</label><input type="text" id="ag" placeholder="Vorname Nachname"></div>
+    <div class="field"><label>Assistenz</label><input type="text" id="assistenz" placeholder="Vorname Nachname"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <i class="ti ti-chart-bar card-icon" aria-hidden="true"></i>
+    <span class="card-title">Status Einarbeitung</span>
+    <span class="card-badge b-blue">Pflichtfeld</span>
+  </div>
+  <div class="status-row">
+    <div class="status-btn active-green" onclick="setStatus(this,'active-green')"><i class="ti ti-check" aria-hidden="true"></i> Auf Kurs</div>
+    <div class="status-btn" onclick="setStatus(this,'active-amber')"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Leicht verzögert</div>
+    <div class="status-btn" onclick="setStatus(this,'active-red')"><i class="ti ti-x" aria-hidden="true"></i> Anpassung nötig</div>
+  </div>
+  <div class="field" style="margin-top:10px;">
+    <label>Kurze Begründung / Kontext</label>
+    <textarea id="status-note" placeholder="z. B. Alle Bausteine aus dem Plan erledigt, deine Assistenz zeigt gute Eigeninitiative …"></textarea>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <i class="ti ti-check card-icon" aria-hidden="true"></i>
+    <span class="card-title">Diese Woche erreicht</span>
+    <span class="card-badge b-green">Fortschritt</span>
+  </div>
+  <div class="field">
+    <label>Bearbeitete Bausteine / Themen</label>
+    <textarea id="fortschritt" placeholder="z. B. Kalenderfreigabe eingerichtet · E-Mail-Vorlagen besprochen · Erstes CRM-Training abgeschlossen …"></textarea>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <i class="ti ti-list-check card-icon" aria-hidden="true"></i>
+    <span class="card-title">To-Dos für dich als Arbeitgeber</span>
+    <span class="card-badge b-amber">Handlungsbedarf</span>
+  </div>
+  <div id="todos">
+    <div class="todo-row"><input type="text" placeholder="To-Do 1 …"><input type="text" placeholder="Frist (optional)"></div>
+    <div class="todo-row"><input type="text" placeholder="To-Do 2 …"><input type="text" placeholder="Frist (optional)"></div>
+    <div class="todo-row"><input type="text" placeholder="To-Do 3 …"><input type="text" placeholder="Frist (optional)"></div>
+  </div>
+  <div style="margin-top:8px;">
+    <button onclick="addTodo()" style="font-size:12px; padding:5px 12px; border-radius:var(--border-radius-md); border:0.5px solid var(--color-border-secondary); background:var(--color-background-secondary); color:var(--color-text-secondary); cursor:pointer;">
+      <i class="ti ti-plus" aria-hidden="true"></i> To-Do hinzufügen
+    </button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <i class="ti ti-message-question card-icon" aria-hidden="true"></i>
+    <span class="card-title">Offene Fragen / Klärungsbedarf</span>
+    <span class="card-badge b-gray">Optional</span>
+  </div>
+  <div class="field">
+    <label>Punkte, auf die du reagieren sollst</label>
+    <textarea id="fragen" placeholder="z. B. Hast du die Materialien für den nächsten Baustein schon vorbereitet? …"></textarea>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <i class="ti ti-bulb card-icon" aria-hidden="true"></i>
+    <span class="card-title">Maßnahmen nächste Woche</span>
+    <span class="card-badge b-blue">Ausblick</span>
+  </div>
+  <div class="field">
+    <label>Was wir nächste Woche angehen</label>
+    <textarea id="massnahmen" placeholder="z. B. Baustein 4: Aufgabenübergabe Postfach · Erste eigenständige Aufgabe testen …"></textarea>
+  </div>
+</div>
+
+<div class="highlight-box">
+  <div class="highlight-label">
+    <i class="ti ti-star" aria-hidden="true" style="font-size:14px;"></i>
+    Positives Highlight der Woche
+  </div>
+  <textarea id="highlight" placeholder="Was hat deine Assistenz diese Woche besonders gut gemacht oder überraschend gut gemeistert? …"></textarea>
+</div>
+
+<button class="copy-btn" onclick="copyReport()">
+  <i class="ti ti-copy" aria-hidden="true"></i> Report als Text kopieren
+</button>
+
+<script>
+function setStatus(btn, cls) {
+  document.querySelectorAll('.status-btn').forEach(b => b.className = 'status-btn');
+  btn.className = 'status-btn ' + cls;
+}
+
+function addTodo() {
+  const container = document.getElementById('todos');
+  const row = document.createElement('div');
+  row.className = 'todo-row';
+  row.innerHTML = '<input type="text" placeholder="To-Do …"><input type="text" placeholder="Frist (optional)">';
+  container.appendChild(row);
+}
+
+function b(text) { return '*' + text + '*'; }
+
+function copyReport() {
+  const kw = document.getElementById('kw').value || 'KW –';
+  const zeitraum = document.getElementById('zeitraum').value || '–';
+  const monat = document.getElementById('monat').value;
+  const ag = document.getElementById('ag').value || '–';
+  const assistenz = document.getElementById('assistenz').value || '–';
+  const statusBtn = document.querySelector('.status-btn.active-green, .status-btn.active-amber, .status-btn.active-red');
+  const statusText = statusBtn ? statusBtn.textContent.trim() : '–';
+  const statusNote = document.getElementById('status-note').value;
+  const fortschritt = document.getElementById('fortschritt').value;
+  const fragen = document.getElementById('fragen').value;
+  const massnahmen = document.getElementById('massnahmen').value;
+  const highlight = document.getElementById('highlight').value;
+
+  let todos = '';
+  document.querySelectorAll('#todos .todo-row').forEach((row, i) => {
+    const inputs = row.querySelectorAll('input');
+    const task = inputs[0].value;
+    const frist = inputs[1].value;
+    if (task) todos += `  ${i+1}. ${task}${frist ? ' (bis ' + frist + ')' : ''}\n`;
+  });
+
+  const text =
+`${b('Freitags-Report · ' + kw + ' · ' + zeitraum)}
+Arbeitgeber: ${ag} · Assistenz: ${assistenz} · ${monat}
+
+${b('Status Einarbeitung')}
+${statusText}${statusNote ? '\n' + statusNote : ''}
+
+${b('Diese Woche erreicht')}
+${fortschritt || '–'}
+
+${b('To-Dos für dich')}
+${todos || '  Keine offenen To-Dos'}
+${fragen ? '\n' + b('Offene Fragen') + '\n' + fragen + '\n' : ''}
+${b('Maßnahmen nächste Woche')}
+${massnahmen || '–'}
+
+${b('Positives Highlight der Woche')}
+${highlight || '–'}
+
+Viele Grüße,
+Gianmarco · Assistant Plus`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i> Kopiert!';
+    setTimeout(() => { btn.innerHTML = '<i class="ti ti-copy" aria-hidden="true"></i> Report als Text kopieren'; }, 2000);
+  });
+}
+</script>
